@@ -13,7 +13,7 @@
             font-family: 'Roboto', sans-serif;
             color: #fff;
             text-align: center;
-            background: url('https://images.unsplash.com/photo-1546097445-ec54e4746add?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920') no-repeat center center fixed;
+            background: linear-gradient(to bottom, #002b4d, #003c66) fixed;
             background-size: cover;
             overflow: hidden;
         }
@@ -75,13 +75,13 @@
             text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.8);
         }
 
-        /* Анимация снежинок */
+        /* Снежинки */
         .snowflake {
             position: fixed;
             top: -50px;
             font-size: 1.5em;
             color: #fff;
-            animation: fall 10s linear infinite, drift 4s ease-in-out infinite;
+            animation: fall 10s linear infinite, sway 3s ease-in-out infinite;
         }
 
         @keyframes fall {
@@ -95,12 +95,12 @@
             }
         }
 
-        @keyframes drift {
+        @keyframes sway {
             0%, 100% {
                 transform: translateX(0);
             }
             50% {
-                transform: translateX(30px);
+                transform: translateX(20px);
             }
         }
     </style>
