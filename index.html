@@ -13,7 +13,7 @@
             font-family: 'Roboto', sans-serif;
             color: #fff;
             text-align: center;
-            background: linear-gradient(to bottom, #002b4d, #003c66) fixed;
+            background: linear-gradient(to bottom, #4a90e2, #0c3d99);
             background-size: cover;
             overflow: hidden;
         }
@@ -75,70 +75,80 @@
             text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.8);
         }
 
-        /* Снежинки */
-        .snowflake {
-            position: fixed;
-            top: -50px;
-            font-size: 1.5em;
-            color: #fff;
-            animation: fall 10s linear infinite, sway 3s ease-in-out infinite;
-        }
-
-        @keyframes fall {
-            0% {
-                transform: translateY(-50px);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh);
-                opacity: 0.7;
-            }
-        }
-
-        @keyframes sway {
-            0%, 100% {
-                transform: translateX(0);
-            }
-            50% {
-                transform: translateX(20px);
-            }
+        .hint {
+            margin-top: 10px;
+            font-size: 1em;
+            color: #ffcc00;
+            display: none;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🎄 С Новым годом! 🎁</h1>
-        <p>Ответь на задание, чтобы получить подарок!</p>
+        <p id="question">А Лена кто, если судить по OpenWRT?</p>
         <input type="text" id="answer" placeholder="Ваш ответ">
         <button onclick="checkAnswer()">Проверить</button>
+        <button onclick="showHint()">Подсказка</button>
+        <div class="hint" id="hint">ну попробуй авторизоваться на роутере уже )</div>
         <div class="gift" id="gift">
             🥳 Поздравляем! Ваш подарок: <strong>Купон на скидку</strong> 🎉
         </div>
     </div>
 
-    <!-- Снежинки -->
-    <div class="snowflake" style="left: 5%; animation-duration: 10s;">❄️</div>
-    <div class="snowflake" style="left: 15%; animation-duration: 12s;">❅</div>
-    <div class="snowflake" style="left: 25%; animation-duration: 8s;">❆</div>
-    <div class="snowflake" style="left: 35%; animation-duration: 9s;">❄️</div>
-    <div class="snowflake" style="left: 45%; animation-duration: 11s;">❅</div>
-    <div class="snowflake" style="left: 55%; animation-duration: 13s;">❆</div>
-    <div class="snowflake" style="left: 65%; animation-duration: 10s;">❄️</div>
-    <div class="snowflake" style="left: 75%; animation-duration: 7s;">❅</div>
-    <div class="snowflake" style="left: 85%; animation-duration: 14s;">❆</div>
-    <div class="snowflake" style="left: 95%; animation-duration: 6s;">❄️</div>
-
     <script>
+        const questions = [
+            {
+                question: "А Лена кто, если судить по OpenWRT?",
+                answers: ["admin", "админ"],
+                hint: "ну попробуй авторизоваться на роутере уже )"
+            },
+            {
+                question: "А кто такая красненькая?",
+                answers: ["мамка"],
+                hint: "такая длинная, под окном обычно стоит )"
+            },
+            {
+                question: "Где мы были прошлым летом? (если точнее то сентябрь конечно)",
+                answers: ["арени", "areni", "арэни"],
+                hint: "в жопе не подойдёт ) село, там еще вино делают, одноименный сорт армянского винограда"
+            }
+        ];
+
+        let currentQuestion = 0;
+        const totalQuestions = questions.length;
+
         function checkAnswer() {
-            const correctAnswer = "снеговик"; // Правильный ответ
             const userAnswer = document.getElementById("answer").value.toLowerCase().trim();
+            const correctAnswers = questions[currentQuestion].answers.map(a => a.toLowerCase());
             const giftElement = document.getElementById("gift");
 
-            if (userAnswer === correctAnswer) {
-                giftElement.style.display = "block";
+            if (correctAnswers.includes(userAnswer)) {
+                currentQuestion++;
+                if (currentQuestion < totalQuestions) {
+                    // Переход к следующему вопросу
+                    document.getElementById("question").textContent = questions[currentQuestion].question;
+                    document.getElementById("hint").style.display = "none";
+                    document.getElementById("answer").value = "";
+                } else {
+                    // Все вопросы пройдены, показываем подарок
+                    giftElement.style.display = "block";
+                    document.getElementById("answer").style.display = "none";
+                    document.getElementById("question").style.display = "none";
+                    document.querySelector("button[onclick='checkAnswer()']").style.display = "none";
+                    document.querySelector("button[onclick='showHint()']").style.display = "none";
+                }
             } else {
                 alert("Неправильно! Попробуйте снова.");
             }
+        }
+
+        function showHint() {
+            document.getElementById("hint").textContent = questions[currentQuestion].hint;
+            document.getElementById("hint").style.display = "block";
         }
     </script>
 </body>
